@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:ctse_frontend/Api/api.dart';
 import 'package:ctse_frontend/controller/project_controller.dart';
 import 'package:ctse_frontend/main.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +18,12 @@ class Add_project extends StatefulWidget {
 class _Add_projectState extends State<Add_project> {
   DateTime createdDate = DateTime.now();
 
-    String id;
-    String name;
-    String admin;
-    String member;
-    
-ProjectController projectController =Get.put(ProjectController());
+  String id;
+  String name;
+  String admin;
+  String member;
+
+  ProjectController projectController = Get.put(ProjectController());
 
   @override
   Widget build(BuildContext context) {
@@ -129,42 +132,42 @@ ProjectController projectController =Get.put(ProjectController());
                     alignment: Alignment.bottomCenter,
                     // ignore: deprecated_member_use
                     child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Container(
-                  height: 20,
-                  width: 100,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Container(
+                          height: 20,
+                          width: 100,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                            ),
+                            onPressed: () async {
+                              addFavourite();
+                              // if (projectController.isProcessing.value ==
+                              //     false) {
+                              //   saveProject(
+                              //     projectController
+                              //         .pronameEditingController.text,
+                              //     createdDate.toLocal(),
+                              //     projectController.adminEditingController.text,
+                              //     projectController
+                              //         .memberEditingController.text,
+                              //   );
+                              // }
+                            },
+                            child: Text(
+                              projectController.isProcessing.value == true
+                                  ? 'Processing'
+                                  : 'Create',
+                              style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: Colors.white,
+                                  fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    onPressed:  () {
-                      
-                     if (projectController.isProcessing.value == false) {
-                                
-                                saveProject(
-                                   projectController.pronameEditingController.text,
-                                   createdDate.toLocal(),
-                                   projectController.adminEditingController.text,
-                                   projectController.memberEditingController.text,
-                                   );
-                              }
-                              
-                              
-                    },
-                    child: Text(
-                      projectController.isProcessing.value == true
-                                    ? 'Processing'
-                                    : 'Create',
-                      style: TextStyle(
-                          fontFamily: "Poppins",
-                          color: Colors.white,
-                          fontSize: 18),
-                    ),
-                  ),
-                ),
-              ),
-            ),
                   ),
                   SizedBox(width: 10),
                   Align(
@@ -185,9 +188,43 @@ ProjectController projectController =Get.put(ProjectController());
           )),
     );
   }
-  void saveProject(String name, DateTime createdDate, String admin, String member) {
-    projectController.saveProject(
-        {'name': name, 'createdDate': createdDate, 'admin': admin, 'member': member});
+
+  void addFavourite() async {
+    setState(() {
+      //   _isLoading = true;
+    });
+    try {
+      var data = {
+        "name": projectController.pronameEditingController.text,
+        "createdDate": " 2022-04-05T18:30:00.000+00:00",
+        "admin": projectController.adminEditingController.text,
+        "member": projectController.memberEditingController.text,
+      };
+      var res = await CallApi().postData(data, 'v1/projects');
+      var body = json.decode(res.body);
+      print(body);
+
+      // bodyErrorFav = body['message'];
+
+      if (body != null) {
+        print("sucess");
+      } else {}
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      //  _isLoading = false;
+    });
+  }
+
+  void saveProject(
+      String name, DateTime createdDate, String admin, String member) {
+    projectController.saveProject({
+      'name': name,
+      'createdDate': createdDate,
+      'admin': admin,
+      'member': member
+    });
     Get.back();
   }
 }
