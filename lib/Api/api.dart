@@ -5,7 +5,7 @@ class CallApi {
   var baseurl = '';
   var token;
   // Auth Api
-  var _urlAuth = 'hhttp://192.168.8.103:8080/api/';
+  var _urlAuth = 'hhttp://192.168.8.103:8080/api/v1/projects';
 
 //post data
   postData(data, apiUrl) async {

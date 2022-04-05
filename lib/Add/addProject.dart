@@ -200,7 +200,7 @@ class _Add_projectState extends State<Add_project> {
         "admin": projectController.adminEditingController.text,
         "member": projectController.memberEditingController.text,
       };
-      var res = await CallApi().postData(data, 'v1/projects');
+      var res = await CallApi().postData(data, '');
       var body = json.decode(res.body);
       print(body);
 
