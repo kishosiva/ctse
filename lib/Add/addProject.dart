@@ -22,6 +22,8 @@ class _Add_projectState extends State<Add_project> {
   String name;
   String admin;
   String member;
+  List add;
+  List add1;
 
   ProjectController projectController = Get.put(ProjectController());
 
@@ -197,8 +199,8 @@ class _Add_projectState extends State<Add_project> {
       var data = {
         "name": projectController.pronameEditingController.text,
         "createdDate": " 2022-04-05T18:30:00.000+00:00",
-        "admin": projectController.adminEditingController.text,
-        "member": projectController.memberEditingController.text,
+        "admin": add.add(projectController.adminEditingController.text),
+        "member": add1.add(projectController.memberEditingController.text),
       };
       var res = await CallApi().postData(data, '');
       var body = json.decode(res.body);
