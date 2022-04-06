@@ -5,11 +5,11 @@ class CallApi {
   var baseurl = '';
   var token;
   // Auth Api
-  var _urlAuth = 'hhttp://192.168.8.103:8080/api/v1/projects';
+  var _urlAuth = 'http://192.168.8.103:8080/api/v1/projects';
 
 //post data
   postData(data, apiUrl) async {
-    var fullUrl = Uri.parse(baseurl + apiUrl);
+    var fullUrl = Uri.parse(_urlAuth + apiUrl);
     return await http.post(
       fullUrl,
       body: jsonEncode(data),
@@ -17,13 +17,9 @@ class CallApi {
     );
   }
 
- 
-  
-
   _setHeaders() => {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
       };
 
 //Forget

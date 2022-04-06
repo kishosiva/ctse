@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:ctse_frontend/Api/api.dart';
 import 'package:ctse_frontend/controller/project_controller.dart';
@@ -22,8 +23,25 @@ class _Add_projectState extends State<Add_project> {
   String name;
   String admin;
   String member;
-  List add;
-  List add1;
+  List add = ["ddd,dcac,dcec"];
+  List add1 = ["dd,sass,ssss"];
+
+  List<TextEditingController> controllers = [];
+
+  List<TextEditingController> _color = [];
+  List<TextEditingController> _brand = [];
+
+  @override
+  void initState() {
+    print(add);
+    print(add1);
+    print(createdDate);
+
+    // add.add(projectController.adminEditingController);
+    // add1.add(projectController.adminEditingController);
+
+    super.initState();
+  }
 
   ProjectController projectController = Get.put(ProjectController());
 
@@ -72,7 +90,7 @@ class _Add_projectState extends State<Add_project> {
                 height: 30,
               ),
               new Text(
-                "${createdDate.toLocal()}".split(' ')[0],
+                "${createdDate.toLocal()}",
                 style: TextStyle(color: Colors.black, fontSize: 12),
               ),
               SizedBox(
@@ -176,7 +194,9 @@ class _Add_projectState extends State<Add_project> {
                     alignment: Alignment.bottomCenter,
                     // ignore: deprecated_member_use
                     child: RaisedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        signUp();
+                      },
                       child:
                           const Text('Cancel', style: TextStyle(fontSize: 20)),
                       color: Colors.red,
@@ -197,10 +217,11 @@ class _Add_projectState extends State<Add_project> {
     });
     try {
       var data = {
-        "name": projectController.pronameEditingController.text,
-        "createdDate": " 2022-04-05T18:30:00.000+00:00",
-        "admin": add.add(projectController.adminEditingController.text),
-        "member": add1.add(projectController.memberEditingController.text),
+        "id": 11111,
+        "name": "sssss",
+        "createdDate": "2022-04-09",
+        "admin": add,
+        "member": add1,
       };
       var res = await CallApi().postData(data, '');
       var body = json.decode(res.body);
@@ -228,6 +249,41 @@ class _Add_projectState extends State<Add_project> {
       'member': member
     });
     Get.back();
+  }
+
+  Future signUp() async {
+    if (projectController.adminEditingController.text.isNotEmpty) {
+      // var response =
+      //     await http.post('http://192.168.8.103:8080/api/v1/projects', body: {
+      //   "name": "sssss",
+      //   "createdDate": "2022-04-09",
+      //   "admin": add,
+      //   "member": add1,
+      // });
+
+      var response = await http.post(Uri.parse("http://192.168.8.103:8080/api/v1/projects"),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "name": "sssss",
+        "createdDate": "2022-04-09",
+        "admin": add,
+        "member": add1,
+        }));
+
+    print("response menu " + response.body.toString());
+     //var link = json.decode(response.body);
+
+      //print(verifylink);
+      print("dddd");
+
+      // showToast(
+      //     "Thanks for registering with Flutter localhost. Please click this link to complete this registation",
+      //     duration: 4,
+      //     gravity: Toast.CENTER);
+    } else {
+      // showToast("Enter Username and password first",
+      //     duration: 3, gravity: Toast.TOP);
+    }
   }
 }
 
